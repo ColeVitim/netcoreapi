@@ -7,17 +7,17 @@ namespace APIcomSQLITE.Models
 {
     public class Palavra
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        public string nome { get; set; }
+        public string Nome { get; set; }
 
-        public int pontuacao { get; set; }
+        public int Pontuacao { get; set; }
 
-        public bool ativo { get; set; }
+        public bool Ativo { get; set; }
 
-        public DateTime criado { get; set; }
+        public DateTime Criado { get; set; }
 
-        public DateTime? atualizado { get; set; }
+        public DateTime? Atualizado { get; set; }
 
     }
 }

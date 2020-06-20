@@ -51,6 +51,8 @@ namespace APIcomSQLITE
             {
                 endpoints.MapControllers();
             });
+
+            app.UseStatusCodePages();
         }
     }
 }
