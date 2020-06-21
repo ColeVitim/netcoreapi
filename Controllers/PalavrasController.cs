@@ -1,6 +1,7 @@
 ﻿using APIcomSQLITE.DB;
 using APIcomSQLITE.Models;
 using APIcomSQLITE.ParamQuery;
+using APIcomSQLITE.Repositories.Interface;
 using APIcomSQLITE.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -18,41 +19,28 @@ namespace APIcomSQLITE.Controllers
     [Route("api/palavras")]
     public class PalavrasController : ControllerBase
     {
-        private readonly BancoContext _banco;
+        private readonly IPalavraRepository _repository;
 
 
-        public PalavrasController(BancoContext banco)
+        public PalavrasController(IPalavraRepository repository)
         {
-            _banco = banco;
+            _repository = repository;
         }
 
         [Route("")]
         [HttpGet]
         public ActionResult ObterTodas([FromQuery] PalavraUrlParams query)
         {
-            var itens = _banco.palavras.AsQueryable();
-            if (query.DataFiltro.HasValue)
-                itens = itens.Where(x => x.Criado >= query.DataFiltro.Value);
 
-            if(query.PagNumero.HasValue)
-            {
-                var qtditens = itens.Count();
-                itens = itens.Skip((query.PagNumero.Value - 1) * query.RegistroPorPag.Value).Take(query.RegistroPorPag.Value);
+            var itens = _repository.ObterTodas(query);
 
-                Paginacao pagina = new Paginacao();
-                pagina.NumeroPagina = query.PagNumero.Value;
-                pagina.RegistroPorPagina = query.RegistroPorPag.Value;
-                pagina.TotalRegistros = qtditens;
-                pagina.TotalPaginas = (int)Math.Ceiling((double)qtditens / query.RegistroPorPag.Value);
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(itens.paginacao));
 
-
-                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagina));
-
-                if(query.PagNumero.Value > pagina.TotalPaginas)
+                if(query.PagNumero.Value > itens.paginacao.TotalPaginas)
                 {
                     return NotFound();
                 }
-            }
+            
 
             return Ok(itens);
         }
@@ -61,33 +49,30 @@ namespace APIcomSQLITE.Controllers
         [HttpGet]
         public ActionResult Obter(int id)
         {
-            var palavra = _banco.palavras.Find(id);
+            var palavra = _repository.Obter(id);
             if (palavra == null)
                 return NotFound();
 
-            return Ok();
+            return Ok(palavra);
         }
         [Route("")]
         [HttpPost]
         public ActionResult Cadastrar([FromBody] Palavra palavra)
         {
-            _banco.palavras.Add(palavra);
-            _banco.SaveChanges();
+            _repository.Cadastrar(palavra);
             return Created($"api/palavra/{palavra.Id}",palavra);
         }
         [Route("{id}")]
         [HttpPut]
         public ActionResult Atualizar(int id,[FromBody] Palavra palavra)
         {
-            var palavraFind = _banco.palavras.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            var palavraFind = _repository.Obter(id);
 
             if (palavraFind == null)
                 return NotFound();
 
-            palavra.Id = id;
-            palavra.Atualizado = DateTime.Now;
-            _banco.palavras.Update(palavra);
-            _banco.SaveChanges();
+            palavra.Id = id;          
+            _repository.Atualizar(palavra);
 
             return Ok();
         }
@@ -95,14 +80,14 @@ namespace APIcomSQLITE.Controllers
         [HttpDelete]
         public ActionResult Deletar(int id)
         {
-            var palavra = _banco.palavras.Find(id);
+            var palavra = _repository.Obter(id);
 
             if (palavra == null)
                 return NotFound();
 
-            palavra.Ativo = false;
-            _banco.palavras.Update(palavra);
-            _banco.SaveChanges();
+            _repository.Deletar(id);
+
+          
           
             return NoContent();
         }
