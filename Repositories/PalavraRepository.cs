@@ -27,6 +27,8 @@ namespace APIcomSQLITE.Repositories
 
         public void Cadastrar(Palavra palavra)
         {
+            palavra.Ativo = true;
+            palavra.Criado = DateTime.Now;
             _banco.palavras.Add(palavra);
             _banco.SaveChanges();
         }
@@ -65,7 +67,7 @@ namespace APIcomSQLITE.Repositories
                 lista.paginacao = pagina;
             }
 
-            lista.AddRange(itens.ToList());
+            lista.Resultados.AddRange(itens.ToList());
             return lista;
         }
     }

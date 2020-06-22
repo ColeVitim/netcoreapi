@@ -58,5 +58,6 @@ C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\bin\Debug\netcoreapp3.1\runtimes\win
 C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\bin\Debug\netcoreapp3.1\AutoMapper.dll
 C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\obj\Debug\netcoreapp3.1\APIcomSQLITE.csproj.CoreCompileInputs.cache
 C:\Users\pc096\Desktop\apiCore\APIcomSQLITE\obj\Debug\netcoreapp3.1\APIcomSQLITE.MvcApplicationPartsAssemblyInfo.cache

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using APIcomSQLITE.DB;
 using APIcomSQLITE.Repositories;
 using APIcomSQLITE.Repositories.Interface;
+using APIcomSQLITE.Utils;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +31,12 @@ namespace APIcomSQLITE
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = new MapperConfiguration(cfg =>
+                cfg.AddProfile(new DTOMapperProfile())
+            );
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddDbContext<BancoContext>(opt => {
                 opt.UseSqlite("Data Source=DB\\banco.db");
             });
